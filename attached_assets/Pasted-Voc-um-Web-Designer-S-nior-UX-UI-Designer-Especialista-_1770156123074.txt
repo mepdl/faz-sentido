@@ -1,0 +1,159 @@
+Você é um Web Designer Sênior + UX/UI Designer + Especialista em SEO + Marketing de Conteúdo.
+
+Sua missão é criar um blog moderno, rápido, responsivo e otimizado para monetização chamado:
+
+👉 Diário de Crescimento
+
+====================================
+
+🎯 OBJETIVO DO BLOG
+
+Transformar grandes entrevistas, ideias e conteúdos educacionais em:
+
+Resumos claros
+Aprendizados práticos
+Conteúdos aplicáveis à vida pessoal e profissional
+Com foco em:
+
+✔ Crescimento pessoal ✔ Negócios e carreira ✔ Dinheiro e investimentos ✔ Hábitos e mentalidade ✔ Tecnologia e inovação
+
+E já preparado para:
+
+Anúncios (Google AdSense e similares)
+Marketing de afiliados (livros, cursos, ferramentas)
+====================================
+
+🎨 IDENTIDADE VISUAL
+
+Estilo:
+
+Moderno
+Minimalista
+Profissional
+Confiável
+Paleta sugerida:
+
+Azul escuro (confiança)
+Preto/grafite (autoridade)
+Branco (clareza)
+Azul claro para destaques
+Design:
+
+Layout clean
+Muito espaço em branco
+Tipografia moderna e legível
+Ícones simples representando crescimento, aprendizado e progresso
+====================================
+
+🗂️ ESTRUTURA DO SITE
+
+Menu principal:
+
+Início
+Negócios
+Dinheiro
+Mentalidade
+Hábitos
+Tecnologia
+Sobre
+Página inicial deve conter:
+
+Destaque dos últimos artigos
+Artigos mais populares
+Blocos de categorias
+Espaços estratégicos para anúncios
+====================================
+
+📄 ESTRUTURA PADRÃO DOS POSTS
+
+Cada artigo deve ter:
+
+Título otimizado para SEO e curiosidade
+Introdução curta contextualizando o tema
+Principais aprendizados em tópicos
+Seção “Como aplicar na prática”
+Bloco de recomendação afiliada (livro, curso ou ferramenta)
+Rodapé com fonte de inspiração
+====================================
+
+💰 MONETIZAÇÃO
+
+Incluir espaços visuais para:
+
+Anúncios no topo dos posts
+Anúncios laterais (desktop)
+Anúncios entre seções do conteúdo
+E áreas próprias para:
+
+Links afiliados destacados
+Call to action para newsletter
+====================================
+
+⚖️ BASE JURÍDICA
+
+Criar páginas:
+
+Sobre
+Política de Privacidade
+Aviso Legal
+No aviso legal incluir:
+
+"Este blog produz conteúdos educacionais baseados em análises, resumos e interpretações próprias de entrevistas públicas e materiais educacionais. Não possui vínculo com os criadores originais."
+
+====================================
+
+📱 RESPONSIVIDADE
+
+O site deve:
+
+Funcionar perfeitamente em celular
+Ter leitura confortável em telas pequenas
+Menus adaptados para mobile
+====================================
+
+⚡ PERFORMANCE
+
+Priorizar:
+
+Carregamento rápido
+Estrutura leve
+SEO técnico básico
+====================================
+
+🎯 DIFERENCIAL
+
+Criar o blog pensando como uma mídia digital profissional, não apenas um site simples.
+
+Deve transmitir:
+
+✔ Autoridade
+✔ Clareza
+✔ Evolução contínua
+
+====================================
+
+Requisito obrigatório:
+
+O blog deve ter painel administrativo protegido por login
+
+Deve permitir criar/editar/excluir posts
+
+Deve permitir categorias/tags
+
+Deve permitir upload de imagens
+
+Deve permitir agendamento de posts
+
+Deve permitir gestão de usuários (admin/editor)
+
+Agora gere:
+
+✅ Layout completo do blog
+✅ Estrutura visual das páginas
+✅ Design responsivo
+✅ Exemplos de seções
+✅ Wireframe conceitual (se possível)
+
+Gere o site como se fosse uma startup de mídia digital moderna, com foco em crescimento de audiência e monetização a longo prazo.
+
+Tudo pronto para implementação.
