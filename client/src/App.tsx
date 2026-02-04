@@ -8,6 +8,7 @@ import Home from "@/pages/Home";
 import PostDetail from "@/pages/PostDetail";
 import CategoryPage from "@/pages/CategoryPage";
 import Privacy from "@/pages/Privacy";
+import About from "@/pages/About";
 import Dashboard from "@/pages/admin/Dashboard";
 import PostsList from "@/pages/admin/PostsList";
 import PostEditor from "@/pages/admin/PostEditor";
@@ -22,6 +23,7 @@ function Router() {
       <Route path="/post/:slug" component={PostDetail} />
       <Route path="/category/:slug" component={CategoryPage} />
       <Route path="/privacy" component={Privacy} />
+      <Route path="/about" component={About} />
       
       {/* Admin Routes */}
       <Route path="/admin" component={Dashboard} />
