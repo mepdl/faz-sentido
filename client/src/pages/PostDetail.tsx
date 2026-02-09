@@ -115,7 +115,7 @@ export default function PostDetail() {
         {/* Content */}
         <article className="container mx-auto px-4 max-w-3xl">
           <div 
-            className="prose prose-lg md:prose-xl prose-slate dark:prose-invert max-w-none first-letter:text-5xl first-letter:font-bold first-letter:mr-3 first-letter:float-left"
+            className="prose prose-lg md:prose-xl prose-slate dark:prose-invert max-w-none"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 

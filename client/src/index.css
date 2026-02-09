@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -12,13 +12,13 @@
   --primary: 222 47% 11%;      /* Deep Blue/Graphite */
   --primary-foreground: 210 40% 98%;
   
-  --secondary: 200 98% 39%;    /* Trust Blue */
+  --secondary: 217 91% 60%;    /* Vibrant Blue */
   --secondary-foreground: 210 40% 98%;
   
   --muted: 210 40% 96%;
   --muted-foreground: 215 16% 47%;
   
-  --accent: 200 98% 39%;       /* Vibrant Blue for CTAs */
+  --accent: 217 91% 60%;
   --accent-foreground: 210 40% 98%;
   
   --destructive: 0 84% 60%;
@@ -32,8 +32,8 @@
   
   /* Typography Variables */
   --font-display: 'Outfit', sans-serif;
-  --font-body: 'Playfair Display', serif; /* For long form content */
-  --font-sans: 'Inter', sans-serif;       /* For UI elements */
+  --font-body: 'Plus Jakarta Sans', sans-serif; /* Cleaner, more modern than Playfair */
+  --font-sans: 'Inter', sans-serif;
 }
 
 @layer base {
@@ -50,10 +50,16 @@
   /* Blog post content styles */
   .prose {
     font-family: var(--font-body);
+    @apply text-slate-900 leading-[1.75];
   }
   
   .prose h1, .prose h2, .prose h3 {
     font-family: var(--font-display);
+    @apply text-primary font-bold tracking-tight;
+  }
+
+  .prose p {
+    @apply mb-6;
   }
 }
 
