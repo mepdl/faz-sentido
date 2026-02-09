@@ -9,6 +9,8 @@ import PostDetail from "@/pages/PostDetail";
 import CategoryPage from "@/pages/CategoryPage";
 import Privacy from "@/pages/Privacy";
 import About from "@/pages/About";
+import Terms from "@/pages/Terms";
+import Contact from "@/pages/Contact";
 import Dashboard from "@/pages/admin/Dashboard";
 import PostsList from "@/pages/admin/PostsList";
 import PostEditor from "@/pages/admin/PostEditor";
@@ -24,6 +26,8 @@ function Router() {
       <Route path="/category/:slug" component={CategoryPage} />
       <Route path="/privacy" component={Privacy} />
       <Route path="/about" component={About} />
+      <Route path="/terms" component={Terms} />
+      <Route path="/contact" component={Contact} />
       
       {/* Admin Routes */}
       <Route path="/admin" component={Dashboard} />
