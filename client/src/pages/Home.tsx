@@ -5,6 +5,7 @@ import { PostCard } from "@/components/PostCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ArrowRight, Loader2 } from "lucide-react";
+import { Helmet } from "react-helmet";
 
 export default function Home() {
   const { data: posts, isLoading } = usePosts({ status: 'published' });
@@ -12,8 +13,8 @@ export default function Home() {
   // Separate featured post (latest) and rest
   const featuredPost = posts?.[0];
   const recentPosts = posts?.slice(1, 4) || [];
-  const mindsetPosts = posts?.filter(p => p.category?.slug === 'mentalidade').slice(0, 3) || [];
-  const moneyPosts = posts?.filter(p => p.category?.slug === 'dinheiro').slice(0, 3) || [];
+  const mindsetPosts = posts?.filter(p => p.categoryId === 3).slice(0, 3) || [];
+  const moneyPosts = posts?.filter(p => p.categoryId === 2).slice(0, 3) || [];
 
   if (isLoading) {
     return (
@@ -25,6 +26,13 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
+      <Helmet>
+        <title>Diário de Crescimento | Negócios, Mentalidade e Finanças</title>
+        <meta name="description" content="Sua dose diária de estratégias de negócios, mentalidade de crescimento e liberdade financeira. Aprenda com os melhores especialistas." />
+        <meta property="og:title" content="Diário de Crescimento | Evolua Todos os Dias" />
+        <meta property="og:description" content="Transformamos grandes ideias em aprendizados práticos para sua vida e negócios." />
+        <meta property="og:type" content="website" />
+      </Helmet>
       <Navbar />
 
       <main className="flex-grow">
