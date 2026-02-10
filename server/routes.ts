@@ -30,7 +30,7 @@ export async function registerRoutes(
   });
 
   app.get(api.posts.get.path, async (req, res) => {
-    const idOrSlug = req.params.idOrSlug;
+    const idOrSlug = String(req.params.idOrSlug);
     let post;
     
     // Check if it's a number (ID) or string (slug)
@@ -58,7 +58,8 @@ export async function registerRoutes(
       // Add authorId from authenticated user
       const input = api.posts.create.input.parse({
         ...req.body,
-        authorId: (req.user as any).claims.sub
+        authorId: (req.user as any).claims.sub,
+        seoKeywords: req.body.seoKeywords || null
       });
       const post = await storage.createPost(input);
       res.status(201).json(post);

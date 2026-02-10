@@ -7,11 +7,14 @@ import { ptBR } from "date-fns/locale";
 import { Loader2, Calendar, Clock, User, Share2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Helmet } from "react-helmet";
+import { PostResponse } from "@shared/schema";
 
 export default function PostDetail() {
   const [, params] = useRoute("/post/:slug");
   const slug = params?.slug || "";
-  const { data: post, isLoading, error } = usePost(slug);
+  const { data: postData, isLoading, error } = usePost(slug);
+  const post = postData as PostResponse | undefined;
 
   if (isLoading) {
     return (
@@ -42,6 +45,17 @@ export default function PostDetail() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <Helmet>
+        <title>{post.title} | Diário de Crescimento</title>
+        <meta name="description" content={post.excerpt || "Artigo sobre desenvolvimento pessoal e finanças."} />
+        {post.seoKeywords && <meta name="keywords" content={post.seoKeywords} />}
+        {/* Open Graph Tags */}
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={post.excerpt || ""} />
+        {post.coverImage && <meta property="og:image" content={post.coverImage} />}
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
       <Navbar />
 
       <main className="flex-grow pb-20">

@@ -29,6 +29,7 @@ export const posts = pgTable("posts", {
   categoryId: integer("category_id").references(() => categories.id),
   isFeatured: boolean("is_featured").default(false),
   readTime: integer("read_time").default(5), // in minutes
+  seoKeywords: text("seo_keywords"),
 });
 
 // === RELATIONS ===

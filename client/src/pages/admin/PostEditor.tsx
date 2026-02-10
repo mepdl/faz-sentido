@@ -37,6 +37,9 @@ const formSchema = insertPostSchema.extend({
   slug: z.string().min(1, "Slug é obrigatório"),
   content: z.string().min(1, "Conteúdo é obrigatório"),
   categoryId: z.coerce.number().optional(),
+  excerpt: z.string().optional().transform(v => v || ""),
+  coverImage: z.string().optional().transform(v => v || ""),
+  seoKeywords: z.string().optional().transform(v => v || ""),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -64,6 +67,7 @@ export default function PostEditor() {
       status: "draft",
       readTime: 5,
       isFeatured: false,
+      seoKeywords: "",
     },
   });
 
@@ -80,6 +84,7 @@ export default function PostEditor() {
         categoryId: post.categoryId || undefined,
         readTime: post.readTime || 5,
         isFeatured: post.isFeatured || false,
+        seoKeywords: post.seoKeywords || "",
       });
     }
   }, [post, form]);
@@ -204,8 +209,25 @@ export default function PostEditor() {
                   <FormItem>
                     <FormLabel>Resumo (SEO)</FormLabel>
                     <FormControl>
-                      <Textarea {...field} placeholder="Breve descrição do artigo..." rows={3} />
+                      <Textarea {...field} value={field.value || ""} placeholder="Breve descrição do artigo..." rows={3} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="seoKeywords"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Palavras-chave SEO (separadas por vírgula)</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value || ""} placeholder="investimentos, finanças, dicas..." />
+                    </FormControl>
+                    <FormDescription>
+                      Ajuda o Google a entender do que se trata o seu artigo.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -274,7 +296,12 @@ export default function PostEditor() {
                     <FormItem>
                       <FormLabel>Tempo de Leitura (min)</FormLabel>
                       <FormControl>
-                        <Input type="number" {...field} onChange={e => field.onChange(parseInt(e.target.value))} />
+                        <Input 
+                          type="number" 
+                          {...field} 
+                          value={field.value || 0}
+                          onChange={e => field.onChange(parseInt(e.target.value) || 0)} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -294,7 +321,7 @@ export default function PostEditor() {
                       </div>
                       <FormControl>
                         <Switch
-                          checked={field.value}
+                          checked={!!field.value}
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
@@ -312,7 +339,7 @@ export default function PostEditor() {
                     <FormItem>
                       <FormLabel>URL da Imagem de Capa</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="https://..." />
+                        <Input {...field} value={field.value || ""} placeholder="https://..." />
                       </FormControl>
                       {field.value && (
                         <img 
