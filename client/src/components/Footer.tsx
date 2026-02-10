@@ -3,11 +3,11 @@ import { TrendingUp, Twitter, Instagram, Linkedin, Mail } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-primary text-primary-foreground pt-16 pb-8">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="bg-primary text-primary-foreground pt-16 pb-8 overflow-hidden w-full">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-full">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
-          <div className="space-y-4">
+          <div className="space-y-4 max-w-full overflow-hidden">
             <div className="flex items-center gap-2">
               <div className="bg-primary-foreground text-primary p-1.5 rounded-lg">
                 <TrendingUp className="h-5 w-5" />

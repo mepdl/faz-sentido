@@ -77,13 +77,13 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle>Artigos Recentes</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="rounded-md border">
-            <table className="w-full text-sm">
+        <CardContent className="p-0 sm:p-6">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[600px]">
               <thead className="bg-muted/50 border-b">
                 <tr>
                   <th className="h-10 px-4 text-left font-medium text-muted-foreground">Título</th>
