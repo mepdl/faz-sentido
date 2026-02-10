@@ -243,7 +243,7 @@ export default function PostEditor() {
                   control={form.control}
                   name="status"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="relative z-[60]">
                       <FormLabel>Status</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
@@ -251,7 +251,7 @@ export default function PostEditor() {
                             <SelectValue placeholder="Selecione o status" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className="z-[70]">
                           <SelectItem value="draft">Rascunho</SelectItem>
                           <SelectItem value="published">Publicado</SelectItem>
                         </SelectContent>
@@ -265,7 +265,7 @@ export default function PostEditor() {
                   control={form.control}
                   name="categoryId"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="relative z-[50]">
                       <FormLabel>Categoria</FormLabel>
                       <Select 
                         onValueChange={(val) => field.onChange(parseInt(val))} 
@@ -276,7 +276,7 @@ export default function PostEditor() {
                             <SelectValue placeholder="Selecione a categoria" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className="z-[70]">
                           {categories?.map((cat) => (
                             <SelectItem key={cat.id} value={cat.id.toString()}>
                               {cat.name}
