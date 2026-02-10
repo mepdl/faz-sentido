@@ -107,7 +107,7 @@ export default function Dashboard() {
                         {post.status === 'published' ? 'Publicado' : 'Rascunho'}
                       </span>
                     </td>
-                    <td className="p-4 text-muted-foreground">{post.category?.name || '-'}</td>
+                    <td className="p-4 text-muted-foreground">{post.categoryId || '-'}</td>
                     <td className="p-4 text-muted-foreground">
                       {format(new Date(post.updatedAt || new Date()), "dd/MM/yyyy", { locale: ptBR })}
                     </td>

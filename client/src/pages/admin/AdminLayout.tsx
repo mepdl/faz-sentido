@@ -26,7 +26,12 @@ export function AdminLayout({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!isLoading && !user) {
-      redirectToLogin(toast);
+      toast({
+        title: "Acesso restrito",
+        description: "Você precisa estar logado para acessar esta área.",
+        variant: "destructive"
+      });
+      window.location.href = "/api/login";
     }
   }, [user, isLoading, toast]);
 
