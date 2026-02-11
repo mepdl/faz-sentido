@@ -49,6 +49,20 @@ export const categoriesRelations = relations(categories, ({ many }) => ({
   posts: many(posts),
 }));
 
+export const contacts = pgTable("contacts", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  message: text("message").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const newsletter = pgTable("newsletter", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // === BASE SCHEMAS ===
 
 export const insertPostSchema = createInsertSchema(posts).omit({ 
@@ -61,6 +75,16 @@ export const insertCategorySchema = createInsertSchema(categories).omit({
   id: true 
 });
 
+export const insertContactSchema = createInsertSchema(contacts).omit({
+  id: true,
+  createdAt: true
+});
+
+export const insertNewsletterSchema = createInsertSchema(newsletter).omit({
+  id: true,
+  createdAt: true
+});
+
 // === EXPLICIT API CONTRACT TYPES ===
 
 // Base types
@@ -68,6 +92,10 @@ export type Post = typeof posts.$inferSelect;
 export type InsertPost = z.infer<typeof insertPostSchema>;
 export type Category = typeof categories.$inferSelect;
 export type InsertCategory = z.infer<typeof insertCategorySchema>;
+export type Contact = typeof contacts.$inferSelect;
+export type InsertContact = z.infer<typeof insertContactSchema>;
+export type Newsletter = typeof newsletter.$inferSelect;
+export type InsertNewsletter = z.infer<typeof insertNewsletterSchema>;
 
 // Request types
 export type CreatePostRequest = InsertPost;

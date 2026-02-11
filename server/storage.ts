@@ -1,9 +1,11 @@
 import { db } from "./db";
 import { 
-  posts, categories,
+  posts, categories, contacts, newsletter,
   type Post, type InsertPost, type UpdatePostRequest,
   type Category, type InsertCategory,
-  type PostsQueryParams
+  type PostsQueryParams,
+  type InsertContact, type Contact,
+  type InsertNewsletter, type Newsletter
 } from "@shared/schema";
 import { users } from "@shared/models/auth";
 import { eq, desc, ilike, and } from "drizzle-orm";
@@ -21,6 +23,10 @@ export interface IStorage {
   getCategories(): Promise<Category[]>;
   createCategory(category: InsertCategory): Promise<Category>;
   getCategoryBySlug(slug: string): Promise<Category | undefined>;
+
+  // Contact & Newsletter
+  createContact(contact: InsertContact): Promise<Contact>;
+  subscribeNewsletter(email: InsertNewsletter): Promise<Newsletter>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -54,7 +60,6 @@ export class DatabaseStorage implements IStorage {
     }
     
     if (params?.category) {
-      // Assuming params.category is a slug
       const category = await this.getCategoryBySlug(params.category);
       if (category) {
         conditions.push(eq(posts.categoryId, category.id));
@@ -176,6 +181,16 @@ export class DatabaseStorage implements IStorage {
   async getCategoryBySlug(slug: string) {
     const [category] = await db.select().from(categories).where(eq(categories.slug, slug));
     return category;
+  }
+
+  async createContact(contact: InsertContact) {
+    const [newContact] = await db.insert(contacts).values(contact).returning();
+    return newContact;
+  }
+
+  async subscribeNewsletter(sub: InsertNewsletter) {
+    const [newSub] = await db.insert(newsletter).values(sub).returning();
+    return newSub;
   }
 }
 
