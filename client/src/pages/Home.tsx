@@ -14,35 +14,6 @@ export default function Home() {
   const { toast } = useToast();
   const { data: posts, isLoading } = usePosts({ status: 'published' });
 
-  const mutation = useMutation({
-    mutationFn: async (email: string) => {
-      await apiRequest("POST", "/api/newsletter", { email });
-    },
-    onSuccess: () => {
-      toast({
-        title: "Inscrição confirmada!",
-        description: "Agora você receberá nossos melhores insights diretamente no seu e-mail.",
-      });
-    },
-    onError: (err: Error) => {
-      toast({
-        title: "Erro ao se inscrever",
-        description: err.message,
-        variant: "destructive",
-      });
-    }
-  });
-
-  const handleNewsletterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
-    if (email) {
-      mutation.mutate(email);
-      (e.target as HTMLFormElement).reset();
-    }
-  };
-
   // Separate featured post (latest) and rest
   const featuredPost = posts?.[0];
   const recentPosts = posts?.slice(1, 4) || [];
