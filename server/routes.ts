@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { setupAuth, registerAuthRoutes, isAuthenticated, authStorage } from "./replit_integrations/auth";
-import { posts, categories } from "@shared/schema";
+import { posts, categories, contacts, newsletter, insertContactSchema, insertNewsletterSchema } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -17,6 +17,35 @@ export async function registerRoutes(
   registerAuthRoutes(app);
 
   // === PUBLIC API ===
+
+  app.post("/api/contact", async (req, res) => {
+    try {
+      const input = insertContactSchema.parse(req.body);
+      const contact = await storage.createContact(input);
+      res.status(201).json(contact);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: err.errors[0].message });
+      }
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.post("/api/newsletter", async (req, res) => {
+    try {
+      const input = insertNewsletterSchema.parse(req.body);
+      const sub = await storage.subscribeNewsletter(input);
+      res.status(201).json(sub);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: err.errors[0].message });
+      }
+      if ((err as any).code === "23505") {
+        return res.status(400).json({ message: "E-mail já cadastrado" });
+      }
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
 
   app.get(api.posts.list.path, async (req, res) => {
     try {
@@ -33,7 +62,6 @@ export async function registerRoutes(
     const idOrSlug = String(req.params.idOrSlug);
     let post;
     
-    // Check if it's a number (ID) or string (slug)
     if (!isNaN(Number(idOrSlug))) {
       post = await storage.getPost(Number(idOrSlug));
     } else {
@@ -55,7 +83,6 @@ export async function registerRoutes(
 
   app.post(api.posts.create.path, isAuthenticated, async (req, res) => {
     try {
-      // Add authorId from authenticated user
       const input = api.posts.create.input.parse({
         ...req.body,
         authorId: (req.user as any).claims.sub,
@@ -153,7 +180,6 @@ async function seedDatabase() {
       });
     } catch (e) {
       console.error("Failed to create system user:", e);
-      // Fallback: try to find any user or just skip seeding posts if strict FK
     }
   }
 

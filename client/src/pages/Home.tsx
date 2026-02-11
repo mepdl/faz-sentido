@@ -6,15 +6,77 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { Helmet } from "react-helmet";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
+  const { toast } = useToast();
   const { data: posts, isLoading } = usePosts({ status: 'published' });
+
+  const mutation = useMutation({
+    mutationFn: async (email: string) => {
+      await apiRequest("POST", "/api/newsletter", { email });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Inscrição confirmada!",
+        description: "Agora você receberá nossos melhores insights diretamente no seu e-mail.",
+      });
+    },
+    onError: (err: Error) => {
+      toast({
+        title: "Erro ao se inscrever",
+        description: err.message,
+        variant: "destructive",
+      });
+    }
+  });
+
+  const handleNewsletterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    if (email) {
+      mutation.mutate(email);
+      (e.target as HTMLFormElement).reset();
+    }
+  };
 
   // Separate featured post (latest) and rest
   const featuredPost = posts?.[0];
   const recentPosts = posts?.slice(1, 4) || [];
   const mindsetPosts = posts?.filter(p => p.categoryId === 3).slice(0, 3) || [];
   const moneyPosts = posts?.filter(p => p.categoryId === 2).slice(0, 3) || [];
+
+  const mutation = useMutation({
+    mutationFn: async (email: string) => {
+      await apiRequest("POST", "/api/newsletter", { email });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Inscrição confirmada!",
+        description: "Agora você receberá nossos melhores insights diretamente no seu e-mail.",
+      });
+    },
+    onError: (err: Error) => {
+      toast({
+        title: "Erro ao se inscrever",
+        description: err.message,
+        variant: "destructive",
+      });
+    }
+  });
+
+  const handleNewsletterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    if (email) {
+      mutation.mutate(email);
+      (e.target as HTMLFormElement).reset();
+    }
+  };
 
   if (isLoading) {
     return (
@@ -163,16 +225,24 @@ export default function Home() {
             <p className="text-xl text-primary-foreground/80 mb-10 max-w-2xl mx-auto">
               Junte-se a mais de 10.000 leitores que recebem semanalmente insights exclusivos sobre crescimento e negócios.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+            <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
               <input 
+                name="email"
                 type="email" 
+                required
                 placeholder="Seu email principal" 
                 className="px-6 py-3 rounded-lg text-foreground bg-white w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <Button size="lg" className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold px-8">
+              <Button 
+                type="submit"
+                size="lg" 
+                disabled={mutation.isPending}
+                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold px-8"
+              >
+                {mutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                 Inscrever-se Grátis
               </Button>
-            </div>
+            </form>
           </div>
         </section>
       </main>
