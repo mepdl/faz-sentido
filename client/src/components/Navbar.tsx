@@ -28,16 +28,13 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="bg-primary text-primary-foreground p-1.5 rounded-lg">
-              <TrendingUp className="h-5 w-5" />
-            </div>
+            <img src="/logo.png" alt="Faz Sentido." className="h-10 w-auto" />
             <span className="text-xl font-bold font-display tracking-tight text-primary hidden sm:block">
-              Diário de Crescimento
+              Faz Sentido.
             </span>
             <span className="text-xl font-bold font-display tracking-tight text-primary sm:hidden">
-              DC
+              FS.
             </span>
           </Link>
 

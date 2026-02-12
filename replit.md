@@ -1,8 +1,8 @@
-# Diário de Crescimento - Blog Platform
+# Faz Sentido. - Blog Platform
 
 ## Overview
 
-Diário de Crescimento ("Growth Diary") is a Portuguese-language blog platform focused on personal growth, business, finance, mindset, and technology. It transforms educational content, interviews, and expert ideas into practical, accessible articles. The platform includes a public-facing blog with category browsing and an admin dashboard for content management. It is designed for monetization through Google AdSense and affiliate marketing.
+Faz Sentido. is a Portuguese-language blog platform focused on personal growth, business, finance, mindset, and technology. It transforms educational content, interviews, and expert ideas into practical, accessible articles. The platform includes a public-facing blog with category browsing and an admin dashboard for content management. It is designed for monetization through Google AdSense and affiliate marketing.
 
 ## User Preferences
 

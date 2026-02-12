@@ -41,16 +41,14 @@ export function Footer() {
     <footer className="bg-primary text-primary-foreground pt-16 pb-8 overflow-hidden w-full">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-full">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-          {/* Brand */}
-          <div className="space-y-4 max-w-full overflow-hidden">
-            <div className="flex items-center gap-2">
-              <div className="bg-primary-foreground text-primary p-1.5 rounded-lg">
-                <TrendingUp className="h-5 w-5" />
-              </div>
-              <span className="text-xl font-bold font-display tracking-tight">
-                Diário de Crescimento
+          {/* Logo & About */}
+          <div className="md:col-span-1">
+            <Link href="/" className="flex items-center gap-2 mb-4 block">
+              <img src="/logo.png" alt="Faz Sentido." className="h-8 w-auto" />
+              <span className="text-2xl font-display font-bold text-primary">
+                Faz Sentido.
               </span>
-            </div>
+            </Link>
             <p className="text-primary-foreground/70 text-sm leading-relaxed">
               Sua dose diária de estratégias de negócios, mentalidade de crescimento e liberdade financeira. Construa o futuro que você merece.
             </p>

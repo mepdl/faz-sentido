@@ -60,9 +60,9 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col font-sans">
       <Helmet>
-        <title>Diário de Crescimento | Negócios, Mentalidade e Finanças</title>
+        <title>Faz Sentido. | Negócios, Mentalidade e Finanças</title>
         <meta name="description" content="Sua dose diária de estratégias de negócios, mentalidade de crescimento e liberdade financeira. Aprenda com os melhores especialistas." />
-        <meta property="og:title" content="Diário de Crescimento | Evolua Todos os Dias" />
+        <meta property="og:title" content="Faz Sentido. | Evolua Todos os Dias" />
         <meta property="og:description" content="Transformamos grandes ideias em aprendizados práticos para sua vida e negócios." />
         <meta property="og:type" content="website" />
       </Helmet>
