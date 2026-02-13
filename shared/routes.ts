@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { insertPostSchema, insertCategorySchema, posts, categories } from './schema';
+import { insertPostSchema, insertCategorySchema, posts, categories, newsletter, contacts } from './schema';
 
 // ============================================
 // SHARED ERROR SCHEMAS
@@ -93,6 +93,44 @@ export const api = {
         201: z.custom<typeof categories.$inferSelect>(),
         400: errorSchemas.validation,
         401: errorSchemas.unauthorized,
+      },
+    },
+  },
+  subscribers: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/subscribers',
+      responses: {
+        200: z.array(z.custom<typeof newsletter.$inferSelect>()),
+        401: errorSchemas.unauthorized,
+      },
+    },
+    delete: {
+      method: 'DELETE' as const,
+      path: '/api/subscribers/:id',
+      responses: {
+        204: z.void(),
+        401: errorSchemas.unauthorized,
+        404: errorSchemas.notFound,
+      },
+    },
+  },
+  contacts: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/contacts',
+      responses: {
+        200: z.array(z.custom<typeof contacts.$inferSelect>()),
+        401: errorSchemas.unauthorized,
+      },
+    },
+    delete: {
+      method: 'DELETE' as const,
+      path: '/api/contacts/:id',
+      responses: {
+        204: z.void(),
+        401: errorSchemas.unauthorized,
+        404: errorSchemas.notFound,
       },
     },
   },

@@ -26,7 +26,11 @@ export interface IStorage {
 
   // Contact & Newsletter
   createContact(contact: InsertContact): Promise<Contact>;
+  getContacts(): Promise<Contact[]>;
+  deleteContact(id: number): Promise<void>;
   subscribeNewsletter(email: InsertNewsletter): Promise<Newsletter>;
+  getSubscribers(): Promise<Newsletter[]>;
+  deleteSubscriber(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -194,6 +198,22 @@ export class DatabaseStorage implements IStorage {
   async subscribeNewsletter(sub: InsertNewsletter) {
     const [newSub] = await db.insert(newsletter).values(sub).returning();
     return newSub;
+  }
+
+  async getContacts() {
+    return await db.select().from(contacts).orderBy(desc(contacts.createdAt));
+  }
+
+  async deleteContact(id: number) {
+    await db.delete(contacts).where(eq(contacts.id, id));
+  }
+
+  async getSubscribers() {
+    return await db.select().from(newsletter).orderBy(desc(newsletter.createdAt));
+  }
+
+  async deleteSubscriber(id: number) {
+    await db.delete(newsletter).where(eq(newsletter.id, id));
   }
 }
 

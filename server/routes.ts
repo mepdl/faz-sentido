@@ -145,6 +145,34 @@ export async function registerRoutes(
     }
   });
 
+  app.get(api.subscribers.list.path, isAuthenticated, async (req, res) => {
+    const subs = await storage.getSubscribers();
+    res.json(subs);
+  });
+
+  app.delete(api.subscribers.delete.path, isAuthenticated, async (req, res) => {
+    try {
+      await storage.deleteSubscriber(Number(req.params.id));
+      res.sendStatus(204);
+    } catch (err) {
+      res.status(404).json({ message: "Subscriber not found" });
+    }
+  });
+
+  app.get(api.contacts.list.path, isAuthenticated, async (req, res) => {
+    const contacts = await storage.getContacts();
+    res.json(contacts);
+  });
+
+  app.delete(api.contacts.delete.path, isAuthenticated, async (req, res) => {
+    try {
+      await storage.deleteContact(Number(req.params.id));
+      res.sendStatus(204);
+    } catch (err) {
+      res.status(404).json({ message: "Contact not found" });
+    }
+  });
+
   // Seed Data
   await seedDatabase();
 

@@ -15,6 +15,8 @@ import Dashboard from "@/pages/admin/Dashboard";
 import PostsList from "@/pages/admin/PostsList";
 import PostEditor from "@/pages/admin/PostEditor";
 import CategoriesList from "@/pages/admin/CategoriesList";
+import SubscribersList from "@/pages/admin/SubscribersList";
+import ContactsList from "@/pages/admin/ContactsList";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -35,6 +37,8 @@ function Router() {
       <Route path="/admin/posts/new" component={PostEditor} />
       <Route path="/admin/posts/edit/:id" component={PostEditor} />
       <Route path="/admin/categories" component={CategoriesList} />
+      <Route path="/admin/subscribers" component={SubscribersList} />
+      <Route path="/admin/contacts" component={ContactsList} />
       
       {/* Fallback */}
       <Route component={NotFound} />

@@ -6,7 +6,8 @@ import {
   LayoutDashboard, 
   FileText, 
   FolderTree, 
-  Settings, 
+  Users,
+  Mail,
   LogOut, 
   TrendingUp,
   Loader2,
@@ -47,6 +48,8 @@ export function AdminLayout({ children }: { children: ReactNode }) {
     { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
     { name: "Posts", href: "/admin/posts", icon: FileText },
     { name: "Categorias", href: "/admin/categories", icon: FolderTree },
+    { name: "Assinantes", href: "/admin/subscribers", icon: Users },
+    { name: "Contatos", href: "/admin/contacts", icon: Mail },
   ];
 
   const SidebarContent = () => (
