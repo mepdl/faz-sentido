@@ -54,12 +54,12 @@ export function AdminLayout({ children }: { children: ReactNode }) {
 
   const SidebarContent = () => (
     <>
-      <div className="h-16 flex items-center px-6 border-b">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="bg-primary text-primary-foreground p-1 rounded">
-            <TrendingUp className="h-4 w-4" />
-          </div>
-          <span className="font-bold font-display text-lg">Admin Panel</span>
+      <div className="h-20 flex items-center px-6 border-b">
+        <Link href="/" className="flex flex-col leading-none font-display font-bold text-lg tracking-tight">
+          <span style={{ color: '#3b3b3b' }} className="dark:text-white">Faz</span>
+          <span style={{ color: '#3b3b3b' }} className="dark:text-white">
+            Sentido<span style={{ color: '#d5940a' }} className="dark:text-white">.</span>
+          </span>
         </Link>
       </div>
 
@@ -110,9 +110,11 @@ export function AdminLayout({ children }: { children: ReactNode }) {
       
       {/* Mobile Header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-background border-b z-50 flex items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2">
-          <TrendingUp className="h-5 w-5 text-primary" />
-          <span className="font-bold font-display">DC Admin</span>
+        <Link href="/" className="flex flex-col leading-none font-display font-bold text-sm tracking-tight">
+          <span style={{ color: '#3b3b3b' }} className="dark:text-white">Faz</span>
+          <span style={{ color: '#3b3b3b' }} className="dark:text-white">
+            Sentido<span style={{ color: '#d5940a' }} className="dark:text-white">.</span>
+          </span>
         </Link>
         <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
           {isSidebarOpen ? <X /> : <Menu />}
