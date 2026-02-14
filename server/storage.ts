@@ -51,6 +51,7 @@ export class DatabaseStorage implements IStorage {
       isFeatured: posts.isFeatured,
       readTime: posts.readTime,
       seoKeywords: posts.seoKeywords,
+      authorName: posts.authorName,
       category: categories,
       author: users
     })
@@ -110,6 +111,7 @@ export class DatabaseStorage implements IStorage {
       isFeatured: posts.isFeatured,
       readTime: posts.readTime,
       seoKeywords: posts.seoKeywords,
+      authorName: posts.authorName,
       category: categories,
       author: users
     })
@@ -143,6 +145,7 @@ export class DatabaseStorage implements IStorage {
       isFeatured: posts.isFeatured,
       readTime: posts.readTime,
       seoKeywords: posts.seoKeywords,
+      authorName: posts.authorName,
       category: categories,
       author: users
     })
