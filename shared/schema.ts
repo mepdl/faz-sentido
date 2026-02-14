@@ -25,7 +25,8 @@ export const posts = pgTable("posts", {
   publishedAt: timestamp("published_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-  authorId: text("author_id").references(() => users.id), // Changed to text to match Replit Auth user ID
+  authorId: text("author_id").references(() => users.id),
+  authorName: text("author_name"),
   categoryId: integer("category_id").references(() => categories.id),
   isFeatured: boolean("is_featured").default(false),
   readTime: integer("read_time").default(5), // in minutes
