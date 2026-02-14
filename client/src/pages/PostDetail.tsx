@@ -86,13 +86,13 @@ export default function PostDetail() {
                        <img src={post.author.profileImageUrl} alt="Author" className="w-full h-full object-cover" />
                      ) : (
                        <div className="w-full h-full flex items-center justify-center bg-primary text-primary-foreground font-bold">
-                         {post.author?.firstName?.[0] || "A"}
+                         {(post.authorName || post.author?.firstName)?.[0] || "A"}
                        </div>
                      )}
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-foreground">
-                      {post.author?.firstName || "Autor"} {post.author?.lastName || ""}
+                    <p className="text-sm font-bold text-foreground" data-testid="text-post-author">
+                      {post.authorName || `${post.author?.firstName || "Autor"} ${post.author?.lastName || ""}`.trim()}
                     </p>
                     <p className="text-xs text-muted-foreground">Editor</p>
                   </div>

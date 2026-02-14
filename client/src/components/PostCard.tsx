@@ -50,12 +50,12 @@ export function PostCard({ post, variant = "default" }: PostCardProps) {
                   <img src={post.author.profileImageUrl} alt="Author" className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-primary text-primary-foreground font-bold">
-                    {post.author?.firstName?.[0] || "A"}
+                    {(post.authorName || post.author?.firstName)?.[0] || "A"}
                   </div>
                 )}
               </div>
               <div className="text-sm">
-                <p className="font-medium">{post.author?.firstName || "Autor"} {post.author?.lastName || ""}</p>
+                <p className="font-medium" data-testid="text-author-name">{post.authorName || `${post.author?.firstName || "Autor"} ${post.author?.lastName || ""}`.trim()}</p>
                 <p className="text-muted-foreground">{formattedDate}</p>
               </div>
             </div>
@@ -91,9 +91,9 @@ export function PostCard({ post, variant = "default" }: PostCardProps) {
           <p className="text-muted-foreground text-sm line-clamp-3 mb-4 flex-grow font-serif">
             {post.excerpt}
           </p>
-          <div className="flex items-center justify-between mt-auto pt-4 border-t border-border/50">
+          <div className="flex items-center justify-between mt-auto pt-4 border-t border-border/50 gap-2 flex-wrap">
             <span className="text-xs text-muted-foreground font-medium">
-              {formattedDate}
+              {post.authorName ? `${post.authorName} · ` : ""}{formattedDate}
             </span>
             <span className="text-sm font-semibold text-primary group-hover:underline">
               Ler artigo

@@ -40,6 +40,7 @@ const formSchema = insertPostSchema.extend({
   excerpt: z.string().optional().transform(v => v || ""),
   coverImage: z.string().optional().transform(v => v || ""),
   seoKeywords: z.string().optional().transform(v => v || ""),
+  authorName: z.string().optional().transform(v => v || ""),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -68,6 +69,7 @@ export default function PostEditor() {
       readTime: 5,
       isFeatured: false,
       seoKeywords: "",
+      authorName: "",
     },
   });
 
@@ -85,6 +87,7 @@ export default function PostEditor() {
         readTime: post.readTime || 5,
         isFeatured: post.isFeatured || false,
         seoKeywords: post.seoKeywords || "",
+        authorName: post.authorName || "",
       });
     }
   }, [post, form]);
@@ -179,6 +182,20 @@ export default function PostEditor() {
                     <FormLabel>URL Slug</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="minha-url-amigavel" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="authorName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Autor</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value || ""} placeholder="Nome do autor do artigo" data-testid="input-author-name" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
