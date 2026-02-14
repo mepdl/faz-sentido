@@ -1,19 +1,25 @@
 import { AdminLayout } from "./AdminLayout";
 import { usePosts } from "@/hooks/use-posts";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Eye, TrendingUp, Users } from "lucide-react";
+import { FileText, Eye, Mail, Users } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
+import type { Newsletter, Contact } from "@shared/schema";
 
 export default function Dashboard() {
   const { data: posts } = usePosts();
+  const { data: subscribers } = useQuery<Newsletter[]>({ queryKey: ['/api/subscribers'] });
+  const { data: contacts } = useQuery<Contact[]>({ queryKey: ['/api/contacts'] });
   
   const totalPosts = posts?.length || 0;
   const publishedPosts = posts?.filter(p => p.status === 'published').length || 0;
   const draftPosts = posts?.filter(p => p.status === 'draft').length || 0;
+  const totalSubscribers = subscribers?.length || 0;
+  const totalContacts = contacts?.length || 0;
 
   return (
     <AdminLayout>
@@ -28,50 +34,50 @@ export default function Dashboard() {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between gap-1 space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total de Artigos</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalPosts}</div>
+            <div className="text-2xl font-bold" data-testid="text-total-posts">{totalPosts}</div>
             <p className="text-xs text-muted-foreground">
               {draftPosts} rascunhos
             </p>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between gap-1 space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Publicados</CardTitle>
             <Eye className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{publishedPosts}</div>
+            <div className="text-2xl font-bold text-green-600" data-testid="text-published-posts">{publishedPosts}</div>
             <p className="text-xs text-muted-foreground">
-              +2 essa semana
+              artigos publicados
             </p>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Visualizações</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className="flex flex-row items-center justify-between gap-1 space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Contatos</CardTitle>
+            <Mail className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12.5K</div>
+            <div className="text-2xl font-bold" data-testid="text-total-contacts">{totalContacts}</div>
             <p className="text-xs text-muted-foreground">
-              +15% do mês passado
+              mensagens recebidas
             </p>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between gap-1 space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Assinantes</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,203</div>
+            <div className="text-2xl font-bold" data-testid="text-total-subscribers">{totalSubscribers}</div>
             <p className="text-xs text-muted-foreground">
-              +48 novos
+              inscritos na newsletter
             </p>
           </CardContent>
         </Card>
