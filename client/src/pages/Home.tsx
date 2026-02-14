@@ -25,7 +25,6 @@ export default function Home() {
   const filteredPosts = activeFilter === "todos"
     ? allPosts
     : allPosts.filter(p => {
-        if (p.category?.slug === activeFilter) return true;
         const cat = categories?.find(c => c.id === p.categoryId);
         return cat?.slug === activeFilter;
       });
@@ -147,38 +146,6 @@ export default function Home() {
                 </Button>
               </div>
             )}
-          </div>
-        </section>
-
-        {/* Newsletter Mid-page CTA */}
-        <section className="py-16 bg-background">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl mx-auto text-center">
-              <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">
-                Receba insights exclusivos
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                Assine nossa newsletter e receba semanalmente as melhores dicas sobre negócios, mentalidade e finanças.
-              </p>
-              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                <input
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="Seu melhor email"
-                  data-testid="input-newsletter-mid"
-                  className="flex-1 px-4 py-2.5 rounded-md border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-                <Button
-                  type="submit"
-                  disabled={mutation.isPending}
-                  data-testid="button-newsletter-mid"
-                >
-                  {mutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-                  Assinar
-                </Button>
-              </form>
-            </div>
           </div>
         </section>
 
