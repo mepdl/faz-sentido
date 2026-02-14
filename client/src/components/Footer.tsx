@@ -43,11 +43,11 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Logo & About */}
           <div className="md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4 block">
-              <img src="/logo.png" alt="Faz Sentido." className="h-8 w-auto" />
-              <span className="text-2xl font-display font-bold text-primary">
-                Faz Sentido.
-              </span>
+            <Link href="/" className="mb-4 block">
+              <div className="flex flex-col leading-none font-display font-bold text-xl tracking-tight">
+                <span className="text-white">Faz</span>
+                <span className="text-white">Sentido<span className="text-white">.</span></span>
+              </div>
             </Link>
             <p className="text-primary-foreground/70 text-sm leading-relaxed">
               Sua dose diária de estratégias de negócios, mentalidade de crescimento e liberdade financeira. Construa o futuro que você merece.
@@ -100,7 +100,7 @@ export function Footer() {
 
         <div className="border-t border-primary-foreground/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-primary-foreground/50">
-            © {new Date().getFullYear()} Diário de Crescimento. Todos os direitos reservados.
+            © {new Date().getFullYear()} Faz Sentido. Todos os direitos reservados.
           </p>
           
           <div className="flex items-center gap-4">

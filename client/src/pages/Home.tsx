@@ -4,21 +4,31 @@ import { Footer } from "@/components/Footer";
 import { PostCard } from "@/components/PostCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Helmet } from "react-helmet";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import type { Category } from "@shared/schema";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
   const { toast } = useToast();
   const { data: posts, isLoading } = usePosts({ status: 'published' });
+  const { data: categories } = useQuery<Category[]>({ queryKey: ['/api/categories'] });
+  const [activeFilter, setActiveFilter] = useState<string>("todos");
 
-  // Separate featured post (latest) and rest
   const featuredPost = posts?.[0];
-  const recentPosts = posts?.slice(1, 4) || [];
-  const mindsetPosts = posts?.filter(p => p.categoryId === 3).slice(0, 3) || [];
-  const moneyPosts = posts?.filter(p => p.categoryId === 2).slice(0, 3) || [];
+  const allPosts = posts?.slice(1) || [];
+
+  const filteredPosts = activeFilter === "todos"
+    ? allPosts
+    : allPosts.filter(p => {
+        if (p.category?.slug === activeFilter) return true;
+        const cat = categories?.find(c => c.id === p.categoryId);
+        return cat?.slug === activeFilter;
+      });
 
   const mutation = useMutation({
     mutationFn: async (email: string) => {
@@ -57,6 +67,11 @@ export default function Home() {
     );
   }
 
+  const filterItems = [
+    { label: "Todos", slug: "todos" },
+    ...(categories?.map(c => ({ label: c.name, slug: c.slug })) || []),
+  ];
+
   return (
     <div className="min-h-screen flex flex-col font-sans">
       <Helmet>
@@ -82,110 +97,90 @@ export default function Home() {
             </div>
 
             {featuredPost && (
-              <div className="mb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <div className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
                 <PostCard post={featuredPost} variant="featured" />
               </div>
             )}
           </div>
         </section>
 
-        {/* Recent Posts Section */}
-        {recentPosts.length > 0 && (
-          <section className="py-16 bg-muted/30">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-bold font-display">Recentes</h2>
-                <Link href="/category/all">
-                  <Button variant="ghost" className="gap-2">
-                    Ver todos <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </Link>
-              </div>
-              <div className="grid md:grid-cols-3 gap-8">
-                {recentPosts.map(post => (
-                  <PostCard key={post.id} post={post} />
+        {/* Filter + Posts Section */}
+        <section className="py-16 bg-muted/30">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
+              <h2 className="text-2xl font-bold font-display">Artigos</h2>
+              <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 no-scrollbar" data-testid="category-filter-bar">
+                {filterItems.map(item => (
+                  <button
+                    key={item.slug}
+                    data-testid={`filter-${item.slug}`}
+                    onClick={() => setActiveFilter(item.slug)}
+                    className={cn(
+                      "px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors",
+                      activeFilter === item.slug
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-background text-muted-foreground border border-border hover-elevate"
+                    )}
+                  >
+                    {item.label}
+                  </button>
                 ))}
               </div>
             </div>
-          </section>
-        )}
 
-        {/* Category Sections */}
-        <div className="py-20 container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16">
-            {/* Mindset Column */}
-            <div className="space-y-8">
-              <div className="flex items-center justify-between border-b pb-4">
-                <h3 className="text-xl font-bold font-display flex items-center gap-2">
-                  <span className="w-2 h-8 bg-blue-600 rounded-full" />
-                  Mentalidade
-                </h3>
-                <Link href="/category/mentalidade" className="text-sm font-medium text-muted-foreground hover:text-primary">
-                  Ver mais
-                </Link>
+            {filteredPosts.length > 0 ? (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredPosts.map(post => (
+                  <PostCard key={post.id} post={post} />
+                ))}
               </div>
-              <div className="space-y-6">
-                {mindsetPosts.length > 0 ? mindsetPosts.map(post => (
-                  <Link key={post.id} href={`/post/${post.slug}`} className="group flex gap-4 items-start">
-                    <div className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
-                      <img 
-                        src={post.coverImage || "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80"} 
-                        alt={post.title} 
-                        className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                      />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-lg leading-tight mb-2 group-hover:text-blue-600 transition-colors">
-                        {post.title}
-                      </h4>
-                      <p className="text-sm text-muted-foreground line-clamp-2">
-                        {post.excerpt}
-                      </p>
-                    </div>
-                  </Link>
-                )) : (
-                  <p className="text-muted-foreground italic">Nenhum post nesta categoria ainda.</p>
-                )}
+            ) : (
+              <div className="text-center py-16">
+                <p className="text-muted-foreground text-lg">Nenhum artigo encontrado nesta categoria.</p>
+                <Button
+                  variant="ghost"
+                  className="mt-4"
+                  onClick={() => setActiveFilter("todos")}
+                  data-testid="button-clear-filter"
+                >
+                  Ver todos os artigos
+                </Button>
               </div>
-            </div>
+            )}
+          </div>
+        </section>
 
-            {/* Money Column */}
-            <div className="space-y-8">
-              <div className="flex items-center justify-between border-b pb-4">
-                <h3 className="text-xl font-bold font-display flex items-center gap-2">
-                  <span className="w-2 h-8 bg-green-600 rounded-full" />
-                  Dinheiro & Negócios
-                </h3>
-                <Link href="/category/dinheiro" className="text-sm font-medium text-muted-foreground hover:text-primary">
-                  Ver mais
-                </Link>
-              </div>
-              <div className="space-y-6">
-                {moneyPosts.length > 0 ? moneyPosts.map(post => (
-                  <Link key={post.id} href={`/post/${post.slug}`} className="group flex gap-4 items-start">
-                    <div className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
-                      <img 
-                        src={post.coverImage || "https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&q=80"} 
-                        alt={post.title} 
-                        className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                      />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-lg leading-tight mb-2 group-hover:text-green-600 transition-colors">
-                        {post.title}
-                      </h4>
-                      <p className="text-sm text-muted-foreground line-clamp-2">
-                        {post.excerpt}
-                      </p>
-                    </div>
-                  </Link>
-                )) : (
-                  <p className="text-muted-foreground italic">Nenhum post nesta categoria ainda.</p>
-                )}
-              </div>
+        {/* Newsletter Mid-page CTA */}
+        <section className="py-16 bg-background">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-2xl mx-auto text-center">
+              <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">
+                Receba insights exclusivos
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                Assine nossa newsletter e receba semanalmente as melhores dicas sobre negócios, mentalidade e finanças.
+              </p>
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="Seu melhor email"
+                  data-testid="input-newsletter-mid"
+                  className="flex-1 px-4 py-2.5 rounded-md border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <Button
+                  type="submit"
+                  disabled={mutation.isPending}
+                  data-testid="button-newsletter-mid"
+                >
+                  {mutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                  Assinar
+                </Button>
+              </form>
             </div>
           </div>
-        </div>
+        </section>
 
         {/* CTA Section */}
         <section className="bg-primary text-primary-foreground py-24">
@@ -194,24 +189,26 @@ export default function Home() {
               Pronto para o próximo nível?
             </h2>
             <p className="text-xl text-primary-foreground/80 mb-10 max-w-2xl mx-auto">
-              Junte-se a mais de 10.000 leitores que recebem semanalmente insights exclusivos sobre crescimento e negócios.
+              Junte-se a leitores que recebem semanalmente insights exclusivos sobre crescimento e negócios.
             </p>
             <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-              <input 
+              <input
                 name="email"
-                type="email" 
+                type="email"
                 required
-                placeholder="Seu email principal" 
+                placeholder="Seu email principal"
+                data-testid="input-newsletter-cta"
                 className="px-6 py-3 rounded-lg text-foreground bg-white w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <Button 
+              <Button
                 type="submit"
-                size="lg" 
+                size="lg"
                 disabled={mutation.isPending}
+                data-testid="button-newsletter-cta"
                 className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold px-8"
               >
                 {mutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                Inscrever-se Grátis
+                Inscrever-se
               </Button>
             </form>
           </div>
