@@ -2,13 +2,13 @@ import { ReactNode, useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { redirectToLogin } from "@/lib/auth-utils";
-import { 
-  LayoutDashboard, 
-  FileText, 
-  FolderTree, 
+import {
+  LayoutDashboard,
+  FileText,
+  FolderTree,
   Users,
   Mail,
-  LogOut, 
+  LogOut,
   TrendingUp,
   Loader2,
   Menu,
@@ -32,7 +32,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
         description: "Você precisa estar logado para acessar esta área.",
         variant: "destructive"
       });
-      window.location.href = "/api/login";
+      window.location.href = "/admin/login";
     }
   }, [user, isLoading, toast]);
 
@@ -65,13 +65,13 @@ export function AdminLayout({ children }: { children: ReactNode }) {
 
       <nav className="flex-1 p-4 space-y-1">
         {navItems.map((item) => (
-          <Link 
-            key={item.href} 
+          <Link
+            key={item.href}
             href={item.href}
             className={cn(
               "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-              location === item.href 
-                ? "bg-primary text-primary-foreground" 
+              location === item.href
+                ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:bg-muted hover:text-primary"
             )}
             onClick={() => setIsSidebarOpen(false)}
@@ -92,8 +92,8 @@ export function AdminLayout({ children }: { children: ReactNode }) {
             <p className="text-xs text-muted-foreground truncate">{user.email}</p>
           </div>
         </div>
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           className="w-full justify-start gap-2 text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/20"
           onClick={() => logout()}
         >
@@ -107,7 +107,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen flex bg-muted/10">
       <Toaster />
-      
+
       {/* Mobile Header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-background border-b z-50 flex items-center justify-between px-4">
         <Link href="/" className="flex flex-col leading-none font-display font-bold text-sm tracking-tight">
@@ -128,7 +128,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
 
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="lg:hidden fixed inset-0 bg-black/50 z-50"
           onClick={() => setIsSidebarOpen(false)}
         />

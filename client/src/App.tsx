@@ -17,6 +17,7 @@ import PostEditor from "@/pages/admin/PostEditor";
 import CategoriesList from "@/pages/admin/CategoriesList";
 import SubscribersList from "@/pages/admin/SubscribersList";
 import ContactsList from "@/pages/admin/ContactsList";
+import Login from "@/pages/admin/Login";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -30,8 +31,9 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/terms" component={Terms} />
       <Route path="/contact" component={Contact} />
-      
+
       {/* Admin Routes */}
+      <Route path="/admin/login" component={Login} />
       <Route path="/admin" component={Dashboard} />
       <Route path="/admin/posts" component={PostsList} />
       <Route path="/admin/posts/new" component={PostEditor} />
@@ -39,7 +41,7 @@ function Router() {
       <Route path="/admin/categories" component={CategoriesList} />
       <Route path="/admin/subscribers" component={SubscribersList} />
       <Route path="/admin/contacts" component={ContactsList} />
-      
+
       {/* Fallback */}
       <Route component={NotFound} />
     </Switch>

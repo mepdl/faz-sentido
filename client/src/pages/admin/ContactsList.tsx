@@ -27,7 +27,7 @@ export default function ContactsList() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
+    mutationFn: async (id: string) => {
       await apiRequest("DELETE", `/api/contacts/${id}`);
     },
     onSuccess: () => {

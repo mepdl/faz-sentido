@@ -4,7 +4,7 @@ import { api, buildUrl, type PostInput, type PostUpdateInput } from "@shared/rou
 // GET /api/posts
 export function usePosts(filters?: { category?: string; status?: 'draft' | 'published'; search?: string; limit?: number }) {
   const queryString = filters ? `?${new URLSearchParams(filters as any).toString()}` : '';
-  
+
   return useQuery({
     queryKey: [api.posts.list.path, filters],
     queryFn: async () => {
@@ -41,7 +41,7 @@ export function useCreatePost() {
         body: JSON.stringify(data),
         credentials: "include",
       });
-      
+
       if (!res.ok) {
         if (res.status === 400) {
           const error = api.posts.create.responses[400].parse(await res.json());
@@ -62,7 +62,7 @@ export function useCreatePost() {
 export function useUpdatePost() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...data }: { id: number } & PostUpdateInput) => {
+    mutationFn: async ({ id, ...data }: { id: string } & PostUpdateInput) => {
       const url = buildUrl(api.posts.update.path, { id });
       const res = await fetch(url, {
         method: api.posts.update.method,
@@ -70,7 +70,7 @@ export function useUpdatePost() {
         body: JSON.stringify(data),
         credentials: "include",
       });
-      
+
       if (!res.ok) {
         if (res.status === 400) {
           const error = api.posts.update.responses[400].parse(await res.json());
@@ -93,13 +93,13 @@ export function useUpdatePost() {
 export function useDeletePost() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (id: number) => {
+    mutationFn: async (id: string) => {
       const url = buildUrl(api.posts.delete.path, { id });
-      const res = await fetch(url, { 
+      const res = await fetch(url, {
         method: api.posts.delete.method,
-        credentials: "include" 
+        credentials: "include"
       });
-      
+
       if (!res.ok) {
         if (res.status === 404) throw new Error('Post not found');
         if (res.status === 401) throw new Error('Unauthorized');

@@ -2,13 +2,13 @@ import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { 
-  Menu, 
-  X, 
-  TrendingUp, 
-  DollarSign, 
-  Brain, 
-  Briefcase 
+import {
+  Menu,
+  X,
+  TrendingUp,
+  DollarSign,
+  Brain,
+  Briefcase
 } from "lucide-react";
 import { useState } from "react";
 
@@ -40,8 +40,8 @@ export function Navbar() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <Link 
-                key={link.href} 
+              <Link
+                key={link.href}
                 href={link.href}
                 className={cn(
                   "text-sm font-medium transition-colors hover:text-primary",
@@ -51,20 +51,7 @@ export function Navbar() {
                 {link.name}
               </Link>
             ))}
-            
-            {user ? (
-              <Link href="/admin">
-                <Button variant="outline" size="sm" className="ml-4">
-                  Admin
-                </Button>
-              </Link>
-            ) : (
-              <a href="/api/login">
-                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">
-                  Entrar
-                </Button>
-              </a>
-            )}
+
           </nav>
 
           {/* Mobile Menu Button */}
@@ -82,8 +69,8 @@ export function Navbar() {
         <div className="md:hidden border-t bg-background p-4 space-y-4 shadow-lg animate-in slide-in-from-top-2">
           <nav className="flex flex-col gap-4">
             {navLinks.map((link) => (
-              <Link 
-                key={link.href} 
+              <Link
+                key={link.href}
                 href={link.href}
                 className={cn(
                   "flex items-center gap-3 text-base font-medium p-2 rounded-md hover:bg-muted",
@@ -96,19 +83,6 @@ export function Navbar() {
               </Link>
             ))}
             <div className="h-px bg-border my-2" />
-            {user ? (
-              <Link href="/admin" onClick={() => setIsMobileMenuOpen(false)}>
-                <Button className="w-full justify-start" variant="outline">
-                  Painel Admin
-                </Button>
-              </Link>
-            ) : (
-              <a href="/api/login">
-                <Button className="w-full" variant="default">
-                  Entrar
-                </Button>
-              </a>
-            )}
           </nav>
         </div>
       )}

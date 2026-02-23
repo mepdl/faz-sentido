@@ -2,15 +2,15 @@ import { AdminLayout } from "./AdminLayout";
 import { usePosts, useDeletePost } from "@/hooks/use-posts";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
 } from "@/components/ui/table";
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -27,7 +27,7 @@ export default function PostsList() {
   const { mutate: deletePost } = useDeletePost();
   const { toast } = useToast();
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     if (confirm("Tem certeza que deseja excluir este artigo?")) {
       deletePost(id, {
         onSuccess: () => {
@@ -81,8 +81,8 @@ export default function PostsList() {
                 <TableCell>
                   <span className={cn(
                     "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium",
-                    post.status === 'published' 
-                      ? "bg-green-100 text-green-700" 
+                    post.status === 'published'
+                      ? "bg-green-100 text-green-700"
                       : "bg-yellow-100 text-yellow-700"
                   )}>
                     {post.status === 'published' ? 'Publicado' : 'Rascunho'}
@@ -110,7 +110,7 @@ export default function PostsList() {
                           <Eye className="w-4 h-4 mr-2" /> Visualizar
                         </DropdownMenuItem>
                       </Link>
-                      <DropdownMenuItem 
+                      <DropdownMenuItem
                         className="text-destructive focus:text-destructive"
                         onClick={() => handleDelete(post.id)}
                       >

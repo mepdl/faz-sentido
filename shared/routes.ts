@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { insertPostSchema, insertCategorySchema, posts, categories, newsletter, contacts } from './schema';
+import { insertPostSchema, insertCategorySchema, posts, categories, newsletter, contacts, PostResponse, CategoryResponse } from './schema';
 
 // ============================================
 // SHARED ERROR SCHEMAS
@@ -35,14 +35,14 @@ export const api = {
         limit: z.coerce.number().optional(),
       }).optional(),
       responses: {
-        200: z.array(z.custom<typeof posts.$inferSelect>()),
+        200: z.array(z.custom<PostResponse>()),
       },
     },
     get: {
       method: 'GET' as const,
       path: '/api/posts/:idOrSlug',
       responses: {
-        200: z.custom<typeof posts.$inferSelect>(),
+        200: z.custom<PostResponse>(),
         404: errorSchemas.notFound,
       },
     },
@@ -51,7 +51,7 @@ export const api = {
       path: '/api/posts',
       input: insertPostSchema,
       responses: {
-        201: z.custom<typeof posts.$inferSelect>(),
+        201: z.custom<PostResponse>(),
         400: errorSchemas.validation,
         401: errorSchemas.unauthorized,
       },
@@ -61,7 +61,7 @@ export const api = {
       path: '/api/posts/:id',
       input: insertPostSchema.partial(),
       responses: {
-        200: z.custom<typeof posts.$inferSelect>(),
+        200: z.custom<PostResponse>(),
         400: errorSchemas.validation,
         404: errorSchemas.notFound,
         401: errorSchemas.unauthorized,
@@ -82,7 +82,7 @@ export const api = {
       method: 'GET' as const,
       path: '/api/categories',
       responses: {
-        200: z.array(z.custom<typeof categories.$inferSelect>()),
+        200: z.array(z.custom<CategoryResponse>()),
       },
     },
     create: {
@@ -90,7 +90,7 @@ export const api = {
       path: '/api/categories',
       input: insertCategorySchema,
       responses: {
-        201: z.custom<typeof categories.$inferSelect>(),
+        201: z.custom<CategoryResponse>(),
         400: errorSchemas.validation,
         401: errorSchemas.unauthorized,
       },
@@ -156,3 +156,5 @@ export function buildUrl(path: string, params?: Record<string, string | number>)
 // ============================================
 export type PostInput = z.infer<typeof api.posts.create.input>;
 export type PostUpdateInput = z.infer<typeof api.posts.update.input>;
+export type CategoryInput = z.infer<typeof api.categories.create.input>;
+export type InsertCategory = CategoryInput;

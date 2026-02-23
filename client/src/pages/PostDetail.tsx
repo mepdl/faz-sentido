@@ -39,9 +39,9 @@ export default function PostDetail() {
     );
   }
 
-  const formattedDate = post.publishedAt 
+  const formattedDate = post.publishedAt
     ? format(new Date(post.publishedAt), "d 'de' MMMM, yyyy", { locale: ptBR })
-    : "Rascunho";
+    : post.status === 'published' ? "Publicado" : "Rascunho";
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -69,11 +69,11 @@ export default function PostDetail() {
                 </Badge>
               )}
             </div>
-            
+
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight text-balance text-primary">
               {post.title}
             </h1>
-            
+
             <p className="text-xl md:text-2xl text-muted-foreground font-serif leading-relaxed mb-8 border-l-4 border-blue-600 pl-6">
               {post.excerpt}
             </p>
@@ -82,13 +82,13 @@ export default function PostDetail() {
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-                     {post.author?.profileImageUrl ? (
-                       <img src={post.author.profileImageUrl} alt="Author" className="w-full h-full object-cover" />
-                     ) : (
-                       <div className="w-full h-full flex items-center justify-center bg-primary text-primary-foreground font-bold">
-                         {(post.authorName || post.author?.firstName)?.[0] || "A"}
-                       </div>
-                     )}
+                    {post.author?.profileImageUrl ? (
+                      <img src={post.author.profileImageUrl} alt="Author" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-primary text-primary-foreground font-bold">
+                        {(post.authorName || post.author?.firstName)?.[0] || "A"}
+                      </div>
+                    )}
                   </div>
                   <div>
                     <p className="text-sm font-bold text-foreground" data-testid="text-post-author">
@@ -118,9 +118,9 @@ export default function PostDetail() {
         {/* Cover Image */}
         {post.coverImage && (
           <div className="container mx-auto px-4 max-w-5xl mb-12">
-            <img 
-              src={post.coverImage} 
-              alt={post.title} 
+            <img
+              src={post.coverImage}
+              alt={post.title}
               className="w-full h-[400px] md:h-[500px] object-cover rounded-2xl shadow-lg"
             />
           </div>
@@ -128,7 +128,7 @@ export default function PostDetail() {
 
         {/* Content */}
         <article className="container mx-auto px-4 max-w-3xl">
-          <div 
+          <div
             className="prose prose-lg md:prose-xl prose-slate dark:prose-invert max-w-none"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />

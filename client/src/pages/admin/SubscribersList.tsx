@@ -19,7 +19,7 @@ export default function SubscribersList() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
+    mutationFn: async (id: string) => {
       await apiRequest("DELETE", `/api/subscribers/${id}`);
     },
     onSuccess: () => {

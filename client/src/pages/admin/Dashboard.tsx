@@ -14,7 +14,7 @@ export default function Dashboard() {
   const { data: posts } = usePosts();
   const { data: subscribers } = useQuery<Newsletter[]>({ queryKey: ['/api/subscribers'] });
   const { data: contacts } = useQuery<Contact[]>({ queryKey: ['/api/contacts'] });
-  
+
   const totalPosts = posts?.length || 0;
   const publishedPosts = posts?.filter(p => p.status === 'published').length || 0;
   const draftPosts = posts?.filter(p => p.status === 'draft').length || 0;
@@ -106,14 +106,16 @@ export default function Dashboard() {
                     <td className="p-4">
                       <span className={cn(
                         "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium",
-                        post.status === 'published' 
-                          ? "bg-green-100 text-green-700" 
+                        post.status === 'published'
+                          ? "bg-green-100 text-green-700"
                           : "bg-yellow-100 text-yellow-700"
                       )}>
                         {post.status === 'published' ? 'Publicado' : 'Rascunho'}
                       </span>
                     </td>
-                    <td className="p-4 text-muted-foreground">{post.categoryId || '-'}</td>
+                    <td className="p-4 text-muted-foreground">
+                      {post.category?.name || post.categoryId || '-'}
+                    </td>
                     <td className="p-4 text-muted-foreground">
                       {format(new Date(post.updatedAt || new Date()), "dd/MM/yyyy", { locale: ptBR })}
                     </td>

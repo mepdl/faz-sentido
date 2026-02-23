@@ -11,16 +11,16 @@ interface PostCardProps {
 }
 
 export function PostCard({ post, variant = "default" }: PostCardProps) {
-  const formattedDate = post.publishedAt 
+  const formattedDate = post.publishedAt
     ? format(new Date(post.publishedAt), "d 'de' MMMM, yyyy", { locale: ptBR })
-    : "Rascunho";
+    : post.status === 'published' ? "Publicado" : "Rascunho";
 
   if (variant === "featured") {
     return (
       <Link href={`/post/${post.slug}`} className="group block relative overflow-hidden rounded-2xl shadow-xl transition-all hover:shadow-2xl">
         <div className="grid md:grid-cols-2 h-full bg-white dark:bg-zinc-900">
           <div className="relative h-64 md:h-full overflow-hidden">
-            <img 
+            <img
               src={post.coverImage || "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&q=80"} // Fallback image
               alt={post.title}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -69,8 +69,8 @@ export function PostCard({ post, variant = "default" }: PostCardProps) {
     <Link href={`/post/${post.slug}`} className="group block h-full">
       <div className="flex flex-col h-full bg-white rounded-xl overflow-hidden border border-border/50 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
         <div className="relative h-48 overflow-hidden">
-          <img 
-            src={post.coverImage || "https://images.unsplash.com/photo-1554774853-719586f8c277?auto=format&fit=crop&q=80"} 
+          <img
+            src={post.coverImage || "https://images.unsplash.com/photo-1554774853-719586f8c277?auto=format&fit=crop&q=80"}
             alt={post.title}
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />

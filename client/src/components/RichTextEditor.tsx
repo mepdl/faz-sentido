@@ -1,17 +1,18 @@
 import { useEditor, EditorContent } from '@tiptap/react';
+import { useEffect } from 'react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import { Button } from '@/components/ui/button';
-import { 
-  Bold, 
-  Italic, 
-  List, 
-  ListOrdered, 
-  Quote, 
-  Heading1, 
-  Heading2, 
-  Undo, 
+import {
+  Bold,
+  Italic,
+  List,
+  ListOrdered,
+  Quote,
+  Heading1,
+  Heading2,
+  Undo,
   Redo,
   Image as ImageIcon
 } from 'lucide-react';
@@ -41,6 +42,13 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
       },
     },
   });
+
+  // Atualiza o conteúdo do editor se ele mudar externamente (ex: carregar de uma API)
+  useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content || "");
+    }
+  }, [content, editor]);
 
   if (!editor) {
     return null;

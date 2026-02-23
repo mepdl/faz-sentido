@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { AdminLayout } from "./AdminLayout";
 import { usePost, useCreatePost, useUpdatePost } from "@/hooks/use-posts";
 import { useCategories } from "@/hooks/use-categories";
-import { useRoute, useLocation } from "wouter";
+import { useParams, useLocation } from "wouter";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { insertPostSchema } from "@shared/schema";
@@ -10,12 +10,12 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  Form, 
-  FormControl, 
-  FormField, 
-  FormItem, 
-  FormLabel, 
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
   FormMessage,
   FormDescription
 } from "@/components/ui/form";
@@ -36,22 +36,24 @@ const formSchema = insertPostSchema.extend({
   title: z.string().min(1, "Título é obrigatório"),
   slug: z.string().min(1, "Slug é obrigatório"),
   content: z.string().min(1, "Conteúdo é obrigatório"),
-  categoryId: z.coerce.number().optional(),
+  categoryId: z.string().nullable().optional(),
   excerpt: z.string().optional().transform(v => v || ""),
   coverImage: z.string().optional().transform(v => v || ""),
   seoKeywords: z.string().optional().transform(v => v || ""),
   authorName: z.string().optional().transform(v => v || ""),
+  readTime: z.coerce.number().default(5),
+  affiliateLinks: z.array(z.any()).optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 export default function PostEditor() {
-  const [, params] = useRoute("/admin/posts/edit/:id");
+  const params = useParams();
   const [, setLocation] = useLocation();
-  const id = params?.id ? parseInt(params.id) : undefined;
+  const id = params?.id; // Mantém como string (UUID)
   const isEditing = !!id;
 
-  const { data: post, isLoading: isLoadingPost } = usePost(id || 0);
+  const { data: post, isLoading: isLoadingPost } = usePost(id || "");
   const { data: categories } = useCategories();
   const { mutate: createPost, isPending: isCreating } = useCreatePost();
   const { mutate: updatePost, isPending: isUpdating } = useUpdatePost();
@@ -70,27 +72,31 @@ export default function PostEditor() {
       isFeatured: false,
       seoKeywords: "",
       authorName: "",
+      categoryId: undefined,
+      affiliateLinks: [],
     },
   });
 
   // Load data into form when editing
   useEffect(() => {
-    if (post) {
+    if (post && isEditing) {
+      console.log("Loading post into form:", post);
       form.reset({
-        title: post.title,
-        slug: post.slug,
-        content: post.content,
+        title: post.title || "",
+        slug: post.slug || "",
+        content: post.content || "",
         excerpt: post.excerpt || "",
         coverImage: post.coverImage || "",
-        status: post.status as "draft" | "published",
+        status: (post.status as "draft" | "published") || "draft",
         categoryId: post.categoryId || undefined,
         readTime: post.readTime || 5,
-        isFeatured: post.isFeatured || false,
+        isFeatured: !!post.isFeatured,
         seoKeywords: post.seoKeywords || "",
         authorName: post.authorName || "",
+        affiliateLinks: (post.affiliateLinks as any[]) || [],
       });
     }
-  }, [post, form]);
+  }, [post, isEditing, form]);
 
   // Auto-generate slug from title
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -209,8 +215,8 @@ export default function PostEditor() {
                   <FormItem>
                     <FormLabel>Conteúdo</FormLabel>
                     <FormControl>
-                      <RichTextEditor 
-                        content={field.value} 
+                      <RichTextEditor
+                        content={field.value}
                         onChange={field.onChange}
                       />
                     </FormControl>
@@ -262,7 +268,7 @@ export default function PostEditor() {
                   render={({ field }) => (
                     <FormItem className="relative">
                       <FormLabel>Status</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione o status" />
@@ -284,9 +290,9 @@ export default function PostEditor() {
                   render={({ field }) => (
                     <FormItem className="relative">
                       <FormLabel>Categoria</FormLabel>
-                      <Select 
-                        onValueChange={(val) => field.onChange(parseInt(val))} 
-                        value={field.value?.toString()}
+                      <Select
+                        onValueChange={(val) => field.onChange(val)}
+                        value={field.value || undefined}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -313,11 +319,11 @@ export default function PostEditor() {
                     <FormItem>
                       <FormLabel>Tempo de Leitura (min)</FormLabel>
                       <FormControl>
-                        <Input 
-                          type="number" 
-                          {...field} 
-                          value={field.value || 0}
-                          onChange={e => field.onChange(parseInt(e.target.value) || 0)} 
+                        <Input
+                          type="number"
+                          {...field}
+                          value={field.value}
+                          onChange={e => field.onChange(parseInt(e.target.value) || 0)}
                         />
                       </FormControl>
                       <FormMessage />
@@ -359,10 +365,10 @@ export default function PostEditor() {
                         <Input {...field} value={field.value || ""} placeholder="https://..." />
                       </FormControl>
                       {field.value && (
-                        <img 
-                          src={field.value} 
-                          alt="Preview" 
-                          className="mt-2 w-full h-32 object-cover rounded-md" 
+                        <img
+                          src={field.value}
+                          alt="Preview"
+                          className="mt-2 w-full h-32 object-cover rounded-md"
                         />
                       )}
                       <FormMessage />
@@ -372,9 +378,9 @@ export default function PostEditor() {
               </div>
 
               <div className="pt-4">
-                <Button 
-                  type="submit" 
-                  className="w-full" 
+                <Button
+                  type="submit"
+                  className="w-full"
                   disabled={isCreating || isUpdating}
                 >
                   {(isCreating || isUpdating) && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
