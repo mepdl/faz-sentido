@@ -51,6 +51,9 @@ export function registerAuthRoutes(app: Express) {
         }
 
         if (email.trim().toLowerCase() !== adminEmail.trim().toLowerCase() || password !== adminPassword.trim()) {
+            console.log(`[AUTH] Login falhou para: ${email.trim().toLowerCase()}`);
+            console.log(`[AUTH] Esperado (email/senha comprimentos): ${adminEmail.trim().length}/${adminPassword.trim().length}`);
+            console.log(`[AUTH] Recebido (email/senha comprimentos): ${email.trim().length}/${password.length}`);
             return res.status(401).json({ message: "Credenciais inválidas" });
         }
 
