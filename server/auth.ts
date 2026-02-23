@@ -50,7 +50,7 @@ export function registerAuthRoutes(app: Express) {
                 .json({ message: "ADMIN_EMAIL e ADMIN_PASSWORD não configurados no .env" });
         }
 
-        if (email !== adminEmail || password !== adminPassword) {
+        if (email.trim().toLowerCase() !== adminEmail.trim().toLowerCase() || password !== adminPassword.trim()) {
             return res.status(401).json({ message: "Credenciais inválidas" });
         }
 
