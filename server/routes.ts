@@ -184,14 +184,6 @@ export async function registerRoutes(
     }
   });
 
-  // Seed Data
-  try {
-    await seedDatabase();
-  } catch (error) {
-    console.error("Failed to seed database:", error);
-    // Continue server startup even if seeding fails
-  }
-
   return httpServer;
 }
 

@@ -41,20 +41,22 @@ export function registerAuthRoutes(app: Express) {
     app.post("/api/login", (req, res) => {
         const { email, password } = req.body as { email: string; password: string };
 
-        const adminEmail = process.env.ADMIN_EMAIL;
-        const adminPassword = process.env.ADMIN_PASSWORD;
+        const adminEmail = process.env.ADMIN_EMAIL?.trim();
+        const adminPassword = process.env.ADMIN_PASSWORD?.trim();
 
         if (!adminEmail || !adminPassword) {
+            console.error("[AUTH] ADMIN_EMAIL or ADMIN_PASSWORD not configured");
             return res
                 .status(500)
-                .json({ message: "ADMIN_EMAIL e ADMIN_PASSWORD não configurados no .env" });
+                .json({ message: "Servidor não configurado corretamente (ADMIN_EMAIL/PASSWORD)" });
         }
 
-        if (email.trim().toLowerCase() !== adminEmail.trim().toLowerCase() || password !== adminPassword.trim()) {
-            console.log(`[AUTH] Login falhou para: ${email.trim().toLowerCase()}`);
-            console.log(`[AUTH] Esperado (email/senha comprimentos): ${adminEmail.trim().length}/${adminPassword.trim().length}`);
-            console.log(`[AUTH] Recebido (email/senha comprimentos): ${email.trim().length}/${password.length}`);
-            return res.status(401).json({ message: "Credenciais inválidas" });
+        const inputEmail = email?.trim().toLowerCase();
+        const inputPassword = password?.trim();
+
+        if (inputEmail !== adminEmail.toLowerCase() || inputPassword !== adminPassword) {
+            console.log(`[AUTH] Login failed for: ${inputEmail}`);
+            return res.status(401).json({ message: "E-mail ou senha incorretos" });
         }
 
         (req.session as any).userId = "admin";
