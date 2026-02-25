@@ -15,6 +15,20 @@ export async function registerRoutes(
   await setupAuth(app);
   registerAuthRoutes(app);
 
+  // === DEBUG (temporary — remove after fixing login) ===
+  app.get("/api/debug", (_req, res) => {
+    res.json({
+      env: {
+        NODE_ENV: process.env.NODE_ENV,
+        ADMIN_EMAIL_SET: !!process.env.ADMIN_EMAIL,
+        ADMIN_PASSWORD_SET: !!process.env.ADMIN_PASSWORD,
+        SESSION_SECRET_SET: !!process.env.SESSION_SECRET,
+        SUPABASE_URL_SET: !!process.env.SUPABASE_URL,
+      },
+      timestamp: new Date().toISOString(),
+    });
+  });
+
   // === PUBLIC API ===
 
   app.post("/api/contact", async (req, res) => {
