@@ -1,10 +1,10 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { api } from "@shared/routes";
+import { api } from "../shared/routes";
 import { z } from "zod";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
-import { posts, categories, contacts, newsletter, insertContactSchema, insertNewsletterSchema } from "@shared/schema";
+import { posts, categories, contacts, newsletter, insertContactSchema, insertNewsletterSchema } from "../shared/schema";
 
 
 export async function registerRoutes(

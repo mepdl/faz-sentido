@@ -5,8 +5,8 @@ import {
   type PostsQueryParams,
   type InsertContact, type Contact,
   type InsertNewsletter, type Newsletter
-} from "@shared/schema";
-import { type User } from "@shared/models/auth";
+} from "../shared/schema";
+import { type User } from "../shared/models/auth";
 
 export interface IStorage {
   // Posts
