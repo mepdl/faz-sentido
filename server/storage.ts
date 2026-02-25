@@ -1,12 +1,12 @@
-import { supabase } from "./supabase";
+import { supabase } from "./supabase.js";
 import {
   type Post, type InsertPost, type UpdatePostRequest,
   type Category, type InsertCategory,
   type PostsQueryParams,
   type InsertContact, type Contact,
   type InsertNewsletter, type Newsletter
-} from "../shared/schema";
-import { type User } from "../shared/models/auth";
+} from "../shared/schema.js";
+import { type User } from "../shared/models/auth.js";
 
 export interface IStorage {
   // Posts

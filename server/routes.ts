@@ -1,34 +1,16 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
-import { api } from "../shared/routes";
+import { storage } from "./storage.js";
+import { api } from "../shared/routes.js";
 import { z } from "zod";
-import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
-import { posts, categories, contacts, newsletter, insertContactSchema, insertNewsletterSchema } from "../shared/schema";
+import { isAuthenticated } from "./auth.js";
+import { posts, categories, contacts, newsletter, insertContactSchema, insertNewsletterSchema } from "../shared/schema.js";
 
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  // Setup Auth
-  await setupAuth(app);
-  registerAuthRoutes(app);
-
-  // === DEBUG (temporary — remove after fixing login) ===
-  app.get("/api/debug", (_req, res) => {
-    res.json({
-      env: {
-        NODE_ENV: process.env.NODE_ENV,
-        ADMIN_EMAIL_SET: !!process.env.ADMIN_EMAIL,
-        ADMIN_PASSWORD_SET: !!process.env.ADMIN_PASSWORD,
-        SESSION_SECRET_SET: !!process.env.SESSION_SECRET,
-        SUPABASE_URL_SET: !!process.env.SUPABASE_URL,
-      },
-      timestamp: new Date().toISOString(),
-    });
-  });
-
   // === PUBLIC API ===
 
   app.post("/api/contact", async (req, res) => {
@@ -104,7 +86,7 @@ export async function registerRoutes(
     try {
       const input = api.posts.create.input.parse({
         ...req.body,
-        authorId: (req.session as any).userId,
+        authorId: (req as any).userId,
         seoKeywords: req.body.seoKeywords || null
       });
       const post = await storage.createPost(input);

@@ -1,109 +1,42 @@
-import "dotenv/config";
-import session from "express-session";
-import MemoryStore from "memorystore";
-import type { Express, RequestHandler } from "express";
+import { type Request, type Response, type NextFunction, type RequestHandler } from "express";
+import { supabase } from "./supabase.js";
 
-const MemoryStoreSession = MemoryStore(session);
+/**
+ * Middleware para verificar se o usuário está autenticado via Supabase.
+ * Espera um token Bearer no header Authorization ou um cookie.
+ */
+export const isAuthenticated: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const authHeader = req.headers.authorization;
+        const token = authHeader?.startsWith("Bearer ") ? authHeader.substring(7) : (req.cookies?.sb_token);
 
-// ─── Session Setup ────────────────────────────────────────────────────────────
+        if (!token) {
+            return res.status(401).json({ message: "Não autorizado: Token ausente" });
+        }
 
-export function setupAuth(app: Express) {
-    const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
-    const isProduction = process.env.NODE_ENV === "production";
+        const { data: { user }, error } = await supabase.auth.getUser(token);
 
-    // Vercel runs behind a reverse proxy — needed for secure cookies
-    if (isProduction) {
-        app.set("trust proxy", 1);
+        if (error || !user) {
+            console.error("[AUTH] Erro ao validar token:", error?.message);
+            return res.status(401).json({ message: "Não autorizado: Token inválido" });
+        }
+
+        // Anexa o usuário à requisição para uso posterior
+        (req as any).user = user;
+        (req as any).userId = user.id;
+
+        next();
+    } catch (err) {
+        console.error("[AUTH] Erro inesperado no middleware:", err);
+        res.status(500).json({ message: "Erro interno na autenticação" });
     }
-
-    app.use(
-        session({
-            secret: process.env.SESSION_SECRET || "fallback-dev-secret",
-            resave: false,
-            saveUninitialized: false,
-            store: new MemoryStoreSession({ checkPeriod: sessionTtl }),
-            cookie: {
-                httpOnly: true,
-                secure: isProduction,
-                sameSite: isProduction ? "none" : "lax",
-                maxAge: sessionTtl,
-            },
-        })
-    );
-}
-
-// ─── Middleware ───────────────────────────────────────────────────────────────
-
-export const isAuthenticated: RequestHandler = (req, res, next) => {
-    if ((req.session as any).userId) {
-        return next();
-    }
-    return res.status(401).json({ message: "Unauthorized" });
 };
 
-// ─── Auth Routes ──────────────────────────────────────────────────────────────
+// Funções de setup vazias para manter compatibilidade com routes.ts sem quebrar tudo de uma vez
+export function setupAuth(_app: any) {
+    // express-session removido em favor do Supabase Auth
+}
 
-export function registerAuthRoutes(app: Express) {
-    // POST /api/login — verifica credenciais do .env
-    app.post("/api/login", (req, res) => {
-        try {
-            console.log("[AUTH] Login attempt received");
-            console.log("[AUTH] req.body type:", typeof req.body);
-            console.log("[AUTH] req.body:", JSON.stringify(req.body));
-
-            const { email, password } = req.body as { email: string; password: string };
-
-            const adminEmail = process.env.ADMIN_EMAIL?.trim();
-            const adminPassword = process.env.ADMIN_PASSWORD?.trim();
-
-            console.log("[AUTH] ADMIN_EMAIL configured:", !!adminEmail);
-            console.log("[AUTH] ADMIN_PASSWORD configured:", !!adminPassword);
-
-            if (!adminEmail || !adminPassword) {
-                console.error("[AUTH] ADMIN_EMAIL or ADMIN_PASSWORD not configured");
-                return res
-                    .status(500)
-                    .json({ message: "Servidor não configurado corretamente (ADMIN_EMAIL/PASSWORD)" });
-            }
-
-            const inputEmail = email?.trim().toLowerCase();
-            const inputPassword = password?.trim();
-
-            console.log("[AUTH] Comparing emails:", inputEmail, "vs", adminEmail.toLowerCase());
-            console.log("[AUTH] Password match:", inputPassword === adminPassword);
-
-            if (inputEmail !== adminEmail.toLowerCase() || inputPassword !== adminPassword) {
-                console.log(`[AUTH] Login failed for: ${inputEmail}`);
-                return res.status(401).json({ message: "E-mail ou senha incorretos" });
-            }
-
-            (req.session as any).userId = "admin";
-            (req.session as any).user = {
-                id: "admin",
-                email: adminEmail,
-                firstName: "Admin",
-                lastName: "",
-                profileImageUrl: null,
-            };
-
-            console.log("[AUTH] Login successful for:", inputEmail);
-            return res.json({ ok: true });
-        } catch (err: any) {
-            console.error("[AUTH] Unexpected error in login handler:", err);
-            return res.status(500).json({ message: "Erro interno no login: " + err.message });
-        }
-    });
-
-    // GET /api/logout — destroi sessão
-    app.get("/api/logout", (req, res) => {
-        req.session.destroy(() => {
-            res.redirect("/");
-        });
-    });
-
-    // GET /api/auth/user — retorna usuário da sessão
-    app.get("/api/auth/user", isAuthenticated, (req, res) => {
-        const user = (req.session as any).user;
-        return res.json(user);
-    });
+export function registerAuthRoutes(_app: any) {
+    // POST /api/login movido para o client-side (Supabase SDK)
 }

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Lock } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function Login() {
     const [, navigate] = useLocation();
@@ -19,17 +20,19 @@ export default function Login() {
         setIsLoading(true);
 
         try {
-            const res = await fetch("/api/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify({ email, password }),
+            const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
             });
 
-            if (!res.ok) {
-                const data = await res.json().catch(() => ({}));
-                throw new Error(data.message || "Credenciais inválidas");
+            if (error) {
+                throw error;
             }
+
+            toast({
+                title: "Sucesso",
+                description: "Login realizado com sucesso!",
+            });
 
             navigate("/admin");
         } catch (err: any) {
