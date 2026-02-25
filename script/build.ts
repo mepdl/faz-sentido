@@ -6,6 +6,7 @@ import { rm, readFile } from "fs/promises";
 // which helps cold start times
 const allowlist = [
   "@google/generative-ai",
+  "@supabase/supabase-js",
   "axios",
   "connect-pg-simple",
   "cors",
@@ -46,6 +47,7 @@ async function buildAll() {
   ];
   const externals = allDeps.filter((dep) => !allowlist.includes(dep));
 
+  // Build for local production (node server)
   await esbuild({
     entryPoints: ["server/index.ts"],
     platform: "node",
@@ -58,6 +60,25 @@ async function buildAll() {
     minify: true,
     external: externals,
     logLevel: "info",
+  });
+
+  // Build for Vercel serverless function (api/index.js)
+  console.log("building Vercel serverless function...");
+  await esbuild({
+    entryPoints: ["server/index.ts"],
+    platform: "node",
+    bundle: true,
+    format: "esm",
+    outfile: "api/index.mjs",
+    define: {
+      "process.env.NODE_ENV": '"production"',
+    },
+    minify: true,
+    external: externals,
+    logLevel: "info",
+    banner: {
+      js: `import { createRequire } from 'module'; const require = createRequire(import.meta.url);`,
+    },
   });
 }
 

@@ -60,7 +60,8 @@ app.use((req, res, next) => {
   next();
 });
 
-(async () => {
+// Initialize routes and middleware
+const initPromise = (async () => {
   try {
     await registerRoutes(httpServer, app);
 
@@ -109,10 +110,21 @@ app.use((req, res, next) => {
         },
       );
     }
+
+    console.log("[SERVER] Initialization complete");
   } catch (error) {
     console.error("Failed to start server:", error);
-    process.exit(1);
+    if (process.env.NODE_ENV !== "production") {
+      process.exit(1);
+    }
+    throw error;
   }
 })();
 
-export default app;
+// Wrapper handler for Vercel serverless — ensures init is complete before handling requests
+const handler = async (req: any, res: any) => {
+  await initPromise;
+  return app(req, res);
+};
+
+export default handler;
